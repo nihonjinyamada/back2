@@ -58,7 +58,7 @@ typing_extensions==4.12.2
 tzdata==2025.1
 unidic-lite==1.0.8
 urllib3==1.26.13
-uvicorn==0.18.0
+uvicorn==0.22.0
 xxhash==3.5.0
 yarl==1.18.3
 starlette>=0.26.1,<0.27.0
