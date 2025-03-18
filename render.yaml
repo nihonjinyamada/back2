@@ -14,6 +14,7 @@ services:
       pip install gdown
       gdown --id 1aBrRpA286xEkQXa75zm39biXogiFScEG -O trained_model/model.safetensors
     startCommand: uvicorn main:app --host 0.0.0.0 --port 8000
+    git_version: "2.48.1"
     envVars:
       - key: ENV_VAR_NAME
         value: "value"
