@@ -1,7 +1,6 @@
 import json
 import os
 import re
-import gdown
 import logging
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import JSONResponse
@@ -149,12 +148,3 @@ async def delete_training_data_range(start_id: int, end_id: int, db: Session = D
 async def global_exception_handler(request, exc: Exception):
     logging.error(f"Unexpected error: {str(exc)}")
     return JSONResponse(status_code=500, content={"メッセージ": "内部サーバーエラー", "エラー": str(exc)})
-
-# 容量の多いファイルの設定
-model_path = "trained_model/model.safetensors"
-file_id = "https://drive.google.com/file/d/1aBrRpA286xEkQXa75zm39biXogiFScEG/view?usp=sharing"  
-
-# モデルが存在しない場合にダウンロード
-if not os.path.exists(model_path):
-    print("Downloading model from Google Drive...")
-    gdown.download(f"https://drive.google.com/uc?id={file_id}", model_path, quiet=False)
