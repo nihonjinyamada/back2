@@ -4,9 +4,9 @@ services:
     env: python
     plan: free
     buildCommand: |
-      # Install Git
+      # Install git
       apt-get update && apt-get install -y git
-      # Clone the repository and reset the changes
+      # Pull the latest code from the repository
       git reset --hard
       git pull origin main
       # Install requirements
