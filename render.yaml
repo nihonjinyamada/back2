@@ -4,17 +4,10 @@ services:
     env: python
     plan: free
     buildCommand: |
-      # Install git
-      apt-get update && apt-get install -y git && echo "git installed"
-      # Pull the latest code from the repository
-      git reset --hard
-      git pull origin main
-      # Install requirements
       pip install -r requirements.txt
       pip install gdown
       gdown --id 1aBrRpA286xEkQXa75zm39biXogiFScEG -O trained_model/model.safetensors
     startCommand: uvicorn main:app --host 0.0.0.0 --port 8000
-    git_version: "2.48.1"
     envVars:
       - key: ENV_VAR_NAME
         value: "value"
