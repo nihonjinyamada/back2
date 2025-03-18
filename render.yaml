@@ -5,7 +5,7 @@ services:
     plan: free
     buildCommand: |
       # Install git
-      apt-get update && apt-get install -y git
+      apt-get update && apt-get install -y git && echo "git installed"
       # Pull the latest code from the repository
       git reset --hard
       git pull origin main
