@@ -147,8 +147,4 @@ async def delete_training_data_range(start_id: int, end_id: int, db: Session = D
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc: Exception):
     logging.error(f"Unexpected error: {str(exc)}")
-<<<<<<< HEAD
     return JSONResponse(status_code=500, content={"メッセージ": "内部サーバーエラー", "エラー": str(exc)})
-=======
-    return JSONResponse(status_code=500, content={"メッセージ": "内部サーバーエラー", "エラー": str(exc)})
->>>>>>> 0ea4493 (Remove LFS tracking for model)
