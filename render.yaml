@@ -4,9 +4,12 @@ services:
     env: python
     plan: free
     buildCommand: |
+      # Install Git
       apt-get update && apt-get install -y git
+      # Clone the repository and reset the changes
       git reset --hard
       git pull origin main
+      # Install requirements
       pip install -r requirements.txt
       pip install gdown
       gdown --id 1aBrRpA286xEkQXa75zm39biXogiFScEG -O trained_model/model.safetensors
