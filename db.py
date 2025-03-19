@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from models import Base
 
 # データベースの設定
-DATABASE_URL = "sqlite:///C:/Users/kumam/Desktop/App/backend/test.db"
+DATABASE_URL = "sqlite:///test.db"
 
 # セッションの作成
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
