@@ -24,7 +24,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://front-eta-khaki.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,7 +39,6 @@ MODEL_DIR = os.path.join(BASE_DIR, "trained_model")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 DATA_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 
-# trained_model の存在チェック
 if not os.path.exists(MODEL_DIR):
     logging.error(f"Model directory does not exist: {MODEL_DIR}")
     raise RuntimeError(f"Model directory does not exist: {MODEL_DIR}")
@@ -123,8 +122,9 @@ async def create_training_data(data: List[schemas.TrainingDataCreate], db: Sessi
 @app.get("/training_data/", response_model=List[schemas.TrainingDataResponse])
 async def read_training_data(db: Session = Depends(get_db)):
     training_data = crud.get_training_data(db)
+
+    json_path = os.path.join(DATA_DIR, "data.json")
     
-    # 取得したデータを JSON ファイルに保存
     data_to_save = [{"input_text": item.input_text, "output_text": item.output_text} for item in training_data]
     
     with open(json_path, "w", encoding="utf-8") as f:
@@ -142,7 +142,6 @@ async def delete_training_data_range(start_id: int, end_id: int, db: Session = D
         db.delete(item)
     db.commit()
 
-    # 削除後にJSONファイルを更新
     training_data = crud.get_training_data(db)
     data_to_save = [{"input_text": item.input_text, "output_text": item.output_text} for item in training_data]
 

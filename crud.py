@@ -25,6 +25,5 @@ def create_training_data(db: Session, data: list[TrainingDataCreate]):
 def get_training_data(db: Session):
     return db.query(TrainingData).all()
 
-# 類似データを検索する関数
 def search_similar_training_data(db: Session, input_text: str):
     return db.query(TrainingData).filter(TrainingData.input_text.contains(input_text)).all()
