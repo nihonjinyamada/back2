@@ -1,5 +1,9 @@
-import json
+import sys
 import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+import json
 import re
 import logging
 from fastapi import FastAPI, Depends, HTTPException
@@ -9,9 +13,9 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from . import crud
-from .db import get_db
-from . import models
+import crud
+from db import get_db
+import models
 import backend.schemas as schemas
 from typing import List
 
