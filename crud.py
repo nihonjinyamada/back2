@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.models import TrainingData
-from backend.schemas import TrainingDataCreate
+from models import TrainingData
+from schemas import TrainingDataCreate
 from fastapi import HTTPException
 
 def create_training_data(db: Session, data: list[TrainingDataCreate]):

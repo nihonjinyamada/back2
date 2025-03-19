@@ -2,6 +2,7 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import json
 import re
@@ -16,7 +17,7 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 import crud
 from db import get_db
 import models
-import backend.schemas as schemas
+import schemas
 from typing import List
 
 app = FastAPI()

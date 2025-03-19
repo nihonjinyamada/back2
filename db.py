@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from backend.models import Base
+from models import Base
 
 # データベースの設定
 DATABASE_URL = "sqlite:///C:/Users/kumam/Desktop/App/backend/test.db"
