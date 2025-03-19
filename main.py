@@ -34,17 +34,22 @@ app.add_middleware(
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # モデルのロード
-model_dir = r"C:\Users\kumam\Desktop\App\backend\trained_model"
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "trained_model")
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_FILE_PATH = os.path.join(DATA_DIR, "data.json")
 
-if not os.path.exists(model_dir):
-    logging.error(f"Model directory does not exist: {model_dir}")
-    raise RuntimeError(f"Model directory does not exist: {model_dir}")
+# trained_model の存在チェック
+if not os.path.exists(MODEL_DIR):
+    logging.error(f"Model directory does not exist: {MODEL_DIR}")
+    raise RuntimeError(f"Model directory does not exist: {MODEL_DIR}")
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 try:
     logging.info("Loading tokenizer and model...")
-    tokenizer = T5Tokenizer.from_pretrained(model_dir, local_files_only=False)
-    model = T5ForConditionalGeneration.from_pretrained(model_dir, local_files_only=False).to(device)
+    tokenizer = T5Tokenizer.from_pretrained(MODEL_DIR, local_files_only=False)
+    model = T5ForConditionalGeneration.from_pretrained(MODEL_DIR, local_files_only=False).to(device)
     logging.info("Model loaded successfully.")
 except Exception as e:
     logging.error(f"Failed to load model: {str(e)}")
@@ -121,7 +126,6 @@ async def read_training_data(db: Session = Depends(get_db)):
     
     # 取得したデータを JSON ファイルに保存
     data_to_save = [{"input_text": item.input_text, "output_text": item.output_text} for item in training_data]
-    json_path = r"C:\Users\kumam\Desktop\App\backend\data\data.json"
     
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(data_to_save, f, ensure_ascii=False, indent=4)
@@ -141,7 +145,6 @@ async def delete_training_data_range(start_id: int, end_id: int, db: Session = D
     # 削除後にJSONファイルを更新
     training_data = crud.get_training_data(db)
     data_to_save = [{"input_text": item.input_text, "output_text": item.output_text} for item in training_data]
-    json_path = r"C:\Users\kumam\Desktop\App\backend\data\data.json"
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(data_to_save, f, ensure_ascii=False, indent=4)
