@@ -5,8 +5,10 @@ from datasets import Dataset
 from transformers import T5ForConditionalGeneration, T5Tokenizer, TrainingArguments, Trainer
 from transformers import EarlyStoppingCallback
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # データの読み込み
-data_path = "C:/Users/kumam/Desktop/App/backend/data/data.json"
+data_path = os.path.join(BASE_DIR, "data", "data.json")
 with open(data_path, "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -39,7 +41,7 @@ eval_dataset = split_data["test"].with_format("torch")
 
 # トレーニング設定
 training_args = TrainingArguments(
-    output_dir="./results",
+    output_dir=os.path.join(BASE_DIR, "results"),
     gradient_accumulation_steps=4,  
     max_grad_norm=0.5,  
     learning_rate=1e-4,  
@@ -51,7 +53,7 @@ training_args = TrainingArguments(
     eval_strategy="epoch",
     save_strategy="epoch",
     metric_for_best_model="eval_loss",  
-    logging_dir="./logs",
+    logging_dir=os.path.join(BASE_DIR, "logs"),
     logging_steps=500,
     save_steps=500,
     eval_steps=500,
@@ -72,7 +74,8 @@ trainer = Trainer(
 trainer.train()
 
 # モデルの保存
-model.save_pretrained("C:/Users/kumam/Desktop/App/backend/trained_model")
-tokenizer.save_pretrained("C:/Users/kumam/Desktop/App/backend/trained_model")
+model_save_path = os.path.join(BASE_DIR, "trained_model")
+model.save_pretrained(model_save_path)
+tokenizer.save_pretrained(model_save_path)
 
 print("モデルのファインチューニングが完了しました！")
