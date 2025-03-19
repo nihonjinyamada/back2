@@ -24,14 +24,14 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://front-eta-khaki.vercel.app/"],
+    allow_origins=["https://front-eta-khaki.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ログ設定
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO)
 
 # モデルのロード
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -63,8 +63,12 @@ class ModelRequest(BaseModel):
 @app.post("/generate/")
 async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
     try:
+        logging.info(f"Received Request: {request.dict()}")  
+
         genre = request.ジャンル
         tech = request.技術分野
+
+        logging.info(f"ジャンル: {genre}, 技術分野: {tech}")  
 
         prompt = f"ジャンル: {genre}\n技術分野: {tech}"
 
@@ -80,8 +84,7 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
         )
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
-
-        logging.debug(f"Raw Model Output: {output_text}")  
+        logging.info(f"Generated Text: {output_text}")  
 
         dataset_url_match = re.findall(r"https?://[^\s]+", output_text)
         dataset_desc_match = re.search(r"データ概要:\s*(.+?)\s*アプリまたはツール名:", output_text, re.DOTALL)
@@ -95,19 +98,13 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
             "アプリまたはツールの説明": app_desc_match.group(1).strip() if app_desc_match else "アプリの説明がありません。"
         }
 
-        logging.debug(f"Processed Response Data: {response_data}")  
+        logging.info(f"Processed Response Data: {response_data}") 
 
         return JSONResponse(status_code=200, content=response_data)
 
     except Exception as e:
-        logging.error(f"Error in generate_text: {str(e)}")
+        logging.error(f"Error in generate_text: {str(e)}")  
         raise HTTPException(status_code=500, detail={"エラー": "サーバーエラー"})
-
-# エラー
-@app.exception_handler(Exception)
-async def global_exception_handler(request, exc: Exception):
-    logging.error(f"Unexpected error: {str(exc)}")
-    return JSONResponse(status_code=500, content={"エラー": "内部サーバーエラー"})
 
 @app.post("/training_data/")
 async def create_training_data(data: List[schemas.TrainingDataCreate], db: Session = Depends(get_db)):
