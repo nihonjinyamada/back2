@@ -9,9 +9,9 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from backend import crud
-from backend.db import get_db
-from backend import models
+from . import crud
+from .db import get_db
+from . import models
 import backend.schemas as schemas
 from typing import List
 
