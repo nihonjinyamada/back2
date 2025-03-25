@@ -77,7 +77,7 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
             output_ids = model.generate(
                 input_ids.to(device),
                 max_length=384,
-                num_beams=3,
+                num_beams=1,
                 do_sample=True,
                 temperature=0.7,
                 top_p=0.8,
