@@ -76,12 +76,12 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
         with torch.no_grad():
             output_ids = model.generate(
                 input_ids.to(device),
-                max_length=384,
-                num_beams=1,
-                do_sample=True,
-                temperature=0.7,
-                top_p=0.8,
-                early_stopping=True
+                max_length=384,        
+                num_beams=2,           
+                do_sample=True,         
+                temperature=0.7,        
+                top_p=0.8,              
+                early_stopping=False    
             )
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
