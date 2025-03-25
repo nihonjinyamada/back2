@@ -72,17 +72,16 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
 
         prompt = f"ジャンル: {genre}\n技術分野: {tech}"
 
-        input_ids = tokenizer(prompt, return_tensors="pt", padding="max_length", truncation=True, max_length=256).input_ids.to(device)
-        with torch.no_grad():
-            output_ids = model.generate(
-                input_ids.to(device),
+        input_ids = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True, max_length=256).input_ids.to(device)
+        output_ids = model.generate(
+            input_ids.to(device),
                 max_length=384,        
                 num_beams=2,           
                 do_sample=True,         
                 temperature=0.7,        
                 top_p=0.8,              
-                early_stopping=False    
-            )
+                early_stopping=False  
+        )
 
         output_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
         logging.info(f"Generated Text: {output_text}")  
