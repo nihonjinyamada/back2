@@ -54,11 +54,8 @@ try:
     if torch.cuda.is_available():
         model = model.half()
     else:
-        try:
-            model = model.to(torch.bfloat16)
-        except Exception:
-            logging.warning("bfloat16 is not supported, using float32 instead.")
-    
+        model = model.to(torch.float32)
+
     logging.info("Model loaded successfully.")
 except Exception as e:
     logging.error(f"Failed to load model: {str(e)}")
