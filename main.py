@@ -93,7 +93,7 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
                 do_sample=True,      
                 temperature=0.7,     
                 top_p=0.7,           
-                early_stopping=True,
+                early_stopping=False,
                 return_dict_in_generate=False
             )
 
