@@ -24,7 +24,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://front-eta-khaki.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -89,10 +89,10 @@ async def generate_text(request: ModelRequest, db: Session = Depends(get_db)):
                 input_ids,
                 attention_mask=attention_mask,
                 max_new_tokens=100,
-                num_beams=1,         
-                do_sample=True,      
-                temperature=0.7,     
-                top_p=0.7,           
+                num_beams=10,         
+                do_sample=False,      
+                temperature=0.05,     
+                top_p=1.0,           
                 early_stopping=False,
                 return_dict_in_generate=False
             )
@@ -152,6 +152,8 @@ async def delete_training_data_range(start_id: int, end_id: int, db: Session = D
     for item in data_items:
         db.delete(item)
     db.commit()
+
+    json_path = os.path.join(DATA_DIR, "data.json")
 
     training_data = crud.get_training_data(db)
     data_to_save = [{"input_text": item.input_text, "output_text": item.output_text} for item in training_data]

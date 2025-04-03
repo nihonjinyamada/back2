@@ -15,12 +15,12 @@ with open(data_path, "r", encoding="utf-8") as f:
 # Dataset形式に変換
 dataset = Dataset.from_list(data)
 
-# 日本語に対応したモデルの指定
+# モデルの指定
 model_name = "sonoisa/t5-base-japanese"
 tokenizer = T5Tokenizer.from_pretrained(model_name)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
-# トークン化関数
+# トークン化
 def tokenize_function(examples):
     inputs = [f"{x}" for x in examples["input_text"]]
     targets = examples["output_text"]
@@ -44,19 +44,19 @@ training_args = TrainingArguments(
     output_dir=os.path.join(BASE_DIR, "results"),
     gradient_accumulation_steps=4,  
     max_grad_norm=0.5,  
-    learning_rate=1e-4,  
-    warmup_steps=1000,  
+    learning_rate=3e-5,
+    warmup_steps=2000,
     weight_decay=0.01,
-    num_train_epochs=10,
-    per_device_train_batch_size=8,  
+    num_train_epochs=15,
+    per_device_train_batch_size=8,
     per_device_eval_batch_size=16,
     eval_strategy="epoch",
     save_strategy="epoch",
     metric_for_best_model="eval_loss",  
     logging_dir=os.path.join(BASE_DIR, "logs"),
-    logging_steps=500,
-    save_steps=500,
-    eval_steps=500,
+    logging_steps=1000,
+    save_steps=1000,
+    eval_steps=1000,
     load_best_model_at_end=True,
     lr_scheduler_type="cosine"
 )
