@@ -1,5 +1,2 @@
 # Ignore __pycache__ directories
 __pycache__/
-
-# Ignore model.safetensors in trained_model directory
-trained_model/model.safetensors
