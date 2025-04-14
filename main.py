@@ -48,7 +48,7 @@ async def predict(file: UploadFile = File(...)):
         with torch.no_grad():
             outputs = model(image)
             _, predicted = torch.max(outputs, 1)
-            label = "dog" if predicted.item() == 1 else "cat"
+            label = "犬" if predicted.item() == 1 else "猫"
 
         return {"予測ラベル": label}
     
